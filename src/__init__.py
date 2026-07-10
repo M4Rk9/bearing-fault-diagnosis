@@ -1,0 +1,1 @@
+"""Bearing fault diagnosis package."""
