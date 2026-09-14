@@ -228,6 +228,7 @@ def prepare(rows, root, output, target_rate=12000, window_size=2048, hop_size=10
     manifest_bytes = json.dumps(rows, sort_keys=True, separators=(",", ":")).encode()
     summary = {"schema_version": "m4-v1", "classification_ready": require_coverage,
                "manifest_sha256": hashlib.sha256(manifest_bytes).hexdigest(), "classes": CLASSES,
+               "pipeline_sha256": digest(Path(__file__)),
                "target_rate_hz": target_rate, "window_size": window_size, "hop_size": hop_size,
                "window_duration_s": window_size / target_rate,
                "resampling": "scipy.signal.resample_poly; Kaiser beta=5; constant zero padding",
@@ -236,7 +237,10 @@ def prepare(rows, root, output, target_rate=12000, window_size=2048, hop_size=10
                "versions": {"python": platform.python_version(), "numpy": np.__version__, "scipy": scipy.__version__},
                "records": records,
                "partitions": {p: {"groups": sorted({i[0]["group_id"] for i in items}),
-                                  "windows": sum(len(i[3]) for i in items)} for p, items in by_partition.items()}}
+                                  "windows": sum(len(i[3]) for i in items),
+                                  "by_class": {name: {"groups": sorted({i[0]["group_id"] for i in items if i[0]["class_name"] == name}),
+                                                       "windows": sum(len(i[3]) for i in items if i[0]["class_name"] == name)} for name in CLASSES}}
+                              for p, items in by_partition.items()}}
     (output / "summary.json").write_text(json.dumps(summary, indent=2) + "\n")
     (output / "manifest.json").write_text(json.dumps(rows, indent=2) + "\n")
     return summary

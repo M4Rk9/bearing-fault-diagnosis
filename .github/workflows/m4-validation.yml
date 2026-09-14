@@ -35,6 +35,8 @@ jobs:
         run: python -m src.data_pipeline prepare --manifest data/example.lock.json --output data/processed/real-example --record-example
       - name: Reproduce raw waveform and spectrum
         run: python -m src.plot_record --manifest data/example.lock.json --record-id cwru-105-DE --output data/processed/real-example/record.png
+      - name: Acquire and hash all candidate cohort files
+        run: python -m src.data_pipeline acquire --manifest data/manifests/cwru_007_candidates.json --output data/processed/real-example/cohort.acquisition.json
       - name: Record evidence in job log
         run: cat data/processed/real-example/summary.json
       - uses: actions/upload-artifact@v4
@@ -45,5 +47,6 @@ jobs:
             data/processed/real-example/manifest.json
             data/processed/real-example/record.png
             data/processed/real-example/record.json
+            data/processed/real-example/cohort.acquisition.json
           if-no-files-found: error
           retention-days: 30

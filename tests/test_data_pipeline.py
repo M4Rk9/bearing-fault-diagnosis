@@ -122,6 +122,35 @@ class IntegrationTests(unittest.TestCase):
             with self.assertRaisesRegex(ValueError,'Identical channel'):
                 prepare(rows,root,root/'out',require_coverage=False)
 
+    def test_complete_cohort_and_separate_partitions(self):
+        from src.data_pipeline import CLASSES, PARTITIONS
+        with tempfile.TemporaryDirectory() as tmp:
+            root=Path(tmp)
+            rows=[]
+            rng=np.random.default_rng(2026)
+            for part_index, partition in enumerate(PARTITIONS):
+                for class_index, name in enumerate(CLASSES):
+                    identity=f"record-{part_index}-{class_index}"
+                    path=root/f"{identity}.mat"
+                    savemat(path, {'X105_DE_time':rng.normal(size=5000), 'X105RPM':np.array([[1751]])})
+                    rows.append(row(record_id=identity,group_id=identity,relative_path=path.name,
+                                    sha256=digest(path),partition=partition,class_name=name,
+                                    fault_diameter_in=None if name=='normal' else .007,
+                                    faulted_bearing_end=None if name=='normal' else 'DE',
+                                    outer_race_position='6:00' if name=='outer_race' else None))
+            summary=prepare(rows,root,root/'out')
+            self.assertTrue(summary['classification_ready'])
+            self.assertEqual(len(summary['pipeline_sha256']),64)
+            self.assertTrue(all(r['measured_rpm']==1751 for r in summary['records']))
+            sets=[]
+            for partition in PARTITIONS:
+                with np.load(root/'out'/f'{partition}.npz',allow_pickle=False) as data:
+                    self.assertEqual(set(data['labels']),{0,1,2,3})
+                    sets.append(set(data['group_ids']))
+                    for name in CLASSES:
+                        self.assertEqual(summary['partitions'][partition]['by_class'][name]['windows'],3)
+            self.assertTrue(sets[0].isdisjoint(sets[1]) and sets[0].isdisjoint(sets[2]) and sets[1].isdisjoint(sets[2]))
+
     def test_acquire_existing_file_and_hash_lock(self):
         with tempfile.TemporaryDirectory() as tmp:
             root=Path(tmp)

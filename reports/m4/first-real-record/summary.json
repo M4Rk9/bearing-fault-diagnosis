@@ -1,0 +1,71 @@
+{
+  "schema_version": "m4-v1",
+  "classification_ready": false,
+  "manifest_sha256": "14b88bd4c35fd074c27abfe52ebe0aaa7d19632b21205003d418a03a94fc8c78",
+  "classes": {
+    "normal": 0,
+    "inner_race": 1,
+    "ball": 2,
+    "outer_race": 3
+  },
+  "target_rate_hz": 12000,
+  "window_size": 2048,
+  "hop_size": 1024,
+  "window_duration_s": 0.17066666666666666,
+  "resampling": "scipy.signal.resample_poly; Kaiser beta=5; constant zero padding",
+  "feature_preprocessing": "per-window mean removal; amplitude retained; no bandpass",
+  "cnn_preprocessing": "feature branch / max(population std, 1e-8); reject std <= 1e-12",
+  "versions": {
+    "python": "3.11.16",
+    "numpy": "2.3.5",
+    "scipy": "1.17.0"
+  },
+  "records": [
+    {
+      "record_id": "cwru-105-DE",
+      "group_id": "cwru-105",
+      "relative_path": "105.mat",
+      "sha256": "f80b0ea04fd06b372a0eaec7c056543ea37e4bb4727a5b173d2a5bacd2aa9cab",
+      "source_url": "https://engineering.case.edu/sites/default/files/105.mat",
+      "class_name": "inner_race",
+      "fault_diameter_in": 0.007,
+      "fault_depth_in": null,
+      "manufacturer": "SKF",
+      "load_hp": 0,
+      "rpm": 1797,
+      "rpm_source": "official table; approximate, not measured MAT RPM",
+      "faulted_bearing_end": "DE",
+      "channel_key": "X105_DE_time",
+      "sensor_end": "DE",
+      "sampling_rate_hz": 12000,
+      "sampling_rate_source": "https://engineering.case.edu/bearingdatacenter/12k-drive-end-bearing-fault-data",
+      "outer_race_position": null,
+      "units": "unknown",
+      "calibration_source": null,
+      "partition": "train",
+      "measured_rpm": 1797.0,
+      "measured_rpm_key": "X105RPM",
+      "signal_sha256": "4434354abec348a31f541557ef3bde6f3527cf954e422932f141e101b3b1c4f9",
+      "source_samples": 121265,
+      "target_samples": 121265,
+      "windows": 117,
+      "discarded_tail_samples": 433
+    }
+  ],
+  "partitions": {
+    "train": {
+      "groups": [
+        "cwru-105"
+      ],
+      "windows": 117
+    },
+    "validation": {
+      "groups": [],
+      "windows": 0
+    },
+    "test": {
+      "groups": [],
+      "windows": 0
+    }
+  }
+}

@@ -64,8 +64,18 @@ The legacy `load_dataset()` API now fails explicitly because its output discards
 - [x] Separate amplitude-preserving and normalized branches; anti-alias resampling.
 - [x] Window provenance, duration, tail counts and reproducible exports.
 - [x] Focused automated tests and real-record reproduction command/CI job.
-- [ ] Confirm real-record CI evidence and retain its summary/hash in the repository.
+- [x] Confirm real-record CI evidence and retain its summary/hash in the repository.
 - [ ] Resolve healthy per-channel rates with provenance and acquire all selected records.
 - [ ] Record successful full-cohort ingestion and class/group coverage.
 
 Portfolio wording supported by implementation: "Implemented a manifest-driven CWRU ingestion pipeline with recording-level partitions, integrity checks, amplitude-preserving preprocessing and automated validation." Do not add classification accuracy, robustness or a completed M4 claim until the corresponding evidence exists.
+
+## Confirmed first real-record evidence
+
+[CI run 34847330407](https://github.com/M4Rk9/bearing-fault-diagnosis/actions/runs/34847330407) passed both jobs on head `43b69c9c34f7fbf9abe9c76af97f2f2c8583f05a` (PR test merge `a9af6c19d953b6ed17be7f5639c9c423a9c78ba5`). Downloaded artifact ZIP SHA-256: `e5db6f27c1b08588d021f146c008a0ab6174f7183a38fb5140c4e0f7e9efe070`.
+
+The original CI [summary](../reports/m4/first-real-record/summary.json), [manifest](../reports/m4/first-real-record/manifest.json), and [plot settings](../reports/m4/first-real-record/record.json) are retained unchanged. Recording 105 contains 121,265 DE samples at the source-table rate of 12,000 Hz, yielding 117 complete 2048-sample windows with 50% overlap and 433 unused trailing samples. The MAT RPM value is 1797. Raw-file SHA-256: `f80b0ea04fd06b372a0eaec7c056543ea37e4bb4727a5b173d2a5bacd2aa9cab`.
+
+![Official recording 105 waveform and spectrum](../reports/m4/first-real-record/record.png)
+
+This is an ingestion and visualization result, not fault-classification performance. The small waveform preview is not used to make a model claim. Newer summaries also include the pipeline source hash and per-class partition counts; the retained original summary predates those additive fields.
