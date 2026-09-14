@@ -10,7 +10,10 @@ from pathlib import Path
 import numpy as np
 import scipy.io as sio
 
-from preprocessing import preprocess_window, segment_signal
+try:
+    from .preprocessing import preprocess_window, segment_signal
+except ImportError:
+    from preprocessing import preprocess_window, segment_signal
 
 
 LABEL_MAP = {
@@ -39,17 +42,9 @@ FILE_LABEL_MAP = {
 def find_vibration_key(mat_dict: dict) -> str:
     """Find the likely drive-end vibration key in a CWRU .mat file."""
     candidate_keys = [key for key in mat_dict.keys() if "DE_time" in key]
-    if candidate_keys:
-        return candidate_keys[0]
-
-    numeric_keys = [
-        key
-        for key, value in mat_dict.items()
-        if not key.startswith("__") and isinstance(value, np.ndarray) and value.size > 1000
-    ]
-    if not numeric_keys:
-        raise KeyError("No vibration signal key found in .mat file.")
-    return numeric_keys[0]
+    if len(candidate_keys) != 1:
+        raise KeyError("Expected exactly one DE_time key; use the M4 manifest for explicit channel selection.")
+    return candidate_keys[0]
 
 
 def load_mat_signal(file_path: str | Path) -> np.ndarray:
@@ -64,30 +59,12 @@ def load_dataset(
     window_size: int = 2048,
     overlap: float = 0.5,
 ) -> tuple[np.ndarray, np.ndarray]:
-    """Load files listed in FILE_LABEL_MAP, segment them and return X, y."""
-    data_dir = Path(data_dir)
-    all_windows = []
-    all_labels = []
-
-    if not FILE_LABEL_MAP:
-        raise ValueError(
-            "FILE_LABEL_MAP is empty. Add your downloaded CWRU filenames and labels in src/load_data.py."
-        )
-
-    for filename, label_name in FILE_LABEL_MAP.items():
-        file_path = data_dir / filename
-        if not file_path.exists():
-            raise FileNotFoundError(f"Missing file: {file_path}")
-
-        signal = load_mat_signal(file_path)
-        windows = segment_signal(signal, window_size=window_size, overlap=overlap)
-        windows = np.asarray([preprocess_window(w) for w in windows])
-        labels = np.full(len(windows), LABEL_MAP[label_name])
-
-        all_windows.append(windows)
-        all_labels.append(labels)
-
-    return np.vstack(all_windows), np.concatenate(all_labels)
+    """Disabled legacy API: callers must preserve recording-level partitions."""
+    raise RuntimeError(
+        "Legacy window-level dataset loading is disabled: it loses recording partitions. "
+        "Run python -m src.data_pipeline prepare --help and use the partitioned NPZ files. "
+        "Model integration belongs to M5-M7."
+    )
 
 
 if __name__ == "__main__":

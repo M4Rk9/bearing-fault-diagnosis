@@ -1,6 +1,6 @@
 # Data and evaluation protocol
 
-This is the implementation contract for M4–M8, not a description of functionality already delivered. The current loader and training scripts do not yet meet it.
+This is the implementation contract for M4–M8. See the [14 September M4 implementation update](m4_implementation.md) for delivered code and remaining evidence gates. The historical limitations below describe the original starter path; its unsafe dataset API is now disabled.
 
 ## Record manifest
 

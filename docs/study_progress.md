@@ -90,3 +90,7 @@ The repository contains a loader, 2048-sample segmentation with 50% overlap, nor
 No raw recordings, populated filename mapping, fitted models or measured accuracy/F1 results were provided. The training scripts split correlated windows randomly and normalize away amplitude before extracting amplitude-sensitive features. These are tracked in [M4 and M5](roadmap.md), not claimed as fixed here.
 
 The correct current description is **completed foundational and exploratory study, with a starter implementation awaiting reproducible data preparation and model validation**.
+
+## Implementation follow-up — 14 September 2026
+
+The study review above remains a historical snapshot. See [M4 implementation and evidence](m4_implementation.md) for the new validated ingestion code, tests, reproduction commands and unresolved healthy-channel sampling metadata. No classifier result is claimed.

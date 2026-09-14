@@ -45,6 +45,8 @@ Evidence: [classification report](source_inventory.md), [STFT/DWT guide](source_
 
 **Status: In progress — current milestone. Depends on M3.**
 
+Implementation update (14 September 2026): [M4 pipeline, commands and open acceptance gates](m4_implementation.md). The full cohort remains unverified; this milestone is not complete.
+
 Existing work: [MAT loader](../src/load_data.py), [preprocessing helpers](../src/preprocessing.py), [implementation protocol](data_and_evaluation_protocol.md).
 
 - [ ] Obtain actual CWRU recordings from the official source.
@@ -134,6 +136,6 @@ Existing work: [MAT loader](../src/load_data.py), [preprocessing helpers](../src
 
 ## Next concrete work
 
-Begin M4 by obtaining raw recordings, resolving their metadata and implementing the manifest/group split. Do not treat scores from the current overlapping-window random split as completion of M6.
+Continue M4 by reviewing real-record CI evidence, resolving healthy per-channel sampling metadata and recording a successful full-cohort preparation run. The manifest/group pipeline is now implemented. Do not treat scores from the current overlapping-window random split as completion of M6.
 
 To close a milestone, link its implementation commit, commands, tests and report here, record the completion date, and update the README table in the same change.

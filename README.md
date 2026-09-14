@@ -34,15 +34,18 @@ See the [roadmap](docs/roadmap.md) for completion criteria, [study progress](doc
 | Models | SVM, Random Forest and TensorFlow 1D-CNN scripts | Train and evaluate on independent recordings |
 | Dashboard | CSV/synthetic visualization and optional RF prediction | Integrate a validated model and enforce its input contract |
 
-## Current execution limitations
+## M4 implementation update — 14 September 2026
 
-- `FILE_LABEL_MAP` in `src/load_data.py` is empty. Training needs downloaded `.mat` files and verified labels.
-- Training randomly splits windows **after** segmentation with 50% overlap. Those scores must not be presented as independent-recording or cross-load validation. M4 will assign recording groups before windowing.
-- The loader normalizes each window before feature extraction. This makes RMS, standard deviation and variance approximately constant, removing amplitude information. M4–M5 will separate amplitude-preserving features from normalized CNN inputs.
-- The pipeline defaults to 12 kHz without a per-recording sampling-rate manifest. Verify each file/channel, including the healthy baseline; a renamed filename does not establish sampling rate.
-- Trained models, experiment metrics, completed notebooks, DWT/CWT implementation and cross-load tests are absent from the reviewed revision.
+A [manifest-driven ingestion pipeline](docs/m4_implementation.md) now validates recording groups, file integrity, channels and signal quality, exports amplitude-preserving feature windows and separately normalized CNN windows, and retains window provenance. It includes anti-alias resampling, tests and a real-record CI example.
 
-The [data and evaluation protocol](docs/data_and_evaluation_protocol.md) defines the next implementation. This documentation update records the issues; it does not claim to fix training code.
+**M4 remains in progress:** healthy-channel sampling-rate provenance and complete-cohort ingestion evidence are still required. Candidate metadata is explicitly distinguished from verified locks. No classifier result is claimed.
+
+```bash
+pip install -r requirements-m4.txt
+python -m unittest discover -s tests -v
+```
+
+See [M4 reproduction commands and acceptance evidence](docs/m4_implementation.md). The legacy training loader now stops explicitly rather than allowing a random split of overlapping windows. M5–M7 will integrate partitioned artifacts with validated features and models.
 
 ## Setup and visualization
 
@@ -59,7 +62,7 @@ streamlit run dashboard/app.py
 
 The dashboard displays a synthetic demonstration or numeric CSV without a trained model. Predictions require `models/random_forest.pkl`; synthetic input is not evidence of diagnostic accuracy.
 
-Existing training entry points are `python src/train_ml.py` and `python src/train_cnn.py`. These remain starter scripts subject to the limitations above, rather than the final evaluation procedure.
+Existing training entry points are `python src/train_ml.py` and `python src/train_cnn.py`. These starter scripts now stop at the disabled legacy loader; use the M4 commands above for data preparation. Model integration is pending.
 
 ## Project resources
 
