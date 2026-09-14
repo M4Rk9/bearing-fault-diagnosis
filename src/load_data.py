@@ -1,6 +1,6 @@
 """Utilities for loading CWRU bearing vibration `.mat` files.
 
-Update FILE_LABEL_MAP with the exact filenames you download from CWRU.
+Legacy helpers only. Use src.data_pipeline for manifest-driven ingestion.
 """
 
 from __future__ import annotations
@@ -11,9 +11,9 @@ import numpy as np
 import scipy.io as sio
 
 try:
-    from .preprocessing import preprocess_window, segment_signal
+    from .data_pipeline import read_signal
 except ImportError:
-    from preprocessing import preprocess_window, segment_signal
+    from data_pipeline import read_signal
 
 
 LABEL_MAP = {
@@ -30,18 +30,11 @@ CLASS_NAMES = {
     3: "Outer Race Fault",
 }
 
-# Example mapping. Replace these with actual downloaded CWRU file names.
-FILE_LABEL_MAP = {
-    # "97.mat": "normal",
-    # "105.mat": "inner_race",
-    # "118.mat": "ball",
-    # "130.mat": "outer_race",
-}
 
 
 def find_vibration_key(mat_dict: dict) -> str:
-    """Find the likely drive-end vibration key in a CWRU .mat file."""
-    candidate_keys = [key for key in mat_dict.keys() if "DE_time" in key]
+    """Require exactly one DE channel for legacy single-file callers."""
+    candidate_keys = [key for key in mat_dict.keys() if key.endswith("_DE_time")]
     if len(candidate_keys) != 1:
         raise KeyError("Expected exactly one DE_time key; use the M4 manifest for explicit channel selection.")
     return candidate_keys[0]
@@ -51,7 +44,7 @@ def load_mat_signal(file_path: str | Path) -> np.ndarray:
     """Load one CWRU .mat file and return a 1D vibration signal."""
     mat_data = sio.loadmat(file_path)
     signal_key = find_vibration_key(mat_data)
-    return mat_data[signal_key].ravel().astype(float)
+    return read_signal(file_path, signal_key)
 
 
 def load_dataset(

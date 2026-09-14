@@ -6,14 +6,14 @@ The objective is to identify **healthy, inner-race, ball and outer-race** condit
 
 ## Where we are
 
-**Reviewed 13 September 2026: M1–M3 complete for their study deliverables; M4 in progress.** We have studied the motor and bearings, documented the dataset and literature, and interpreted MATLAB plots. Initial feature-extraction, training and dashboard code exists, but there are no verified model-training results.
+**Updated 14 September 2026: M1–M3 complete for their study deliverables; M4 complete for the selected 16-record cohort; M5 next.** We have studied the motor and bearings, documented the dataset and literature, and interpreted MATLAB plots. Initial feature-extraction, training and dashboard code exists, but there are no verified model-training results.
 
 | Milestone | Deliverable | Status |
 |---|---|---|
 | M1 | Motor operation and bearing-fault foundations | Complete — study |
 | M2 | CWRU dataset selection and literature study | Complete — study |
 | M3 | MATLAB signal interpretation and time-frequency study | Complete — exploratory study |
-| M4 | Reproducible ingestion and preprocessing | **In progress — current milestone** |
+| M4 | Reproducible ingestion and preprocessing | **Complete — 16 recordings, 1,821 windows, passing CI** |
 | M5 | Validated statistical, spectral and wavelet features | Pending — initial features exist |
 | M6 | Evaluated SVM and Random Forest baselines | Pending — training scripts exist |
 | M7 | Evaluated 1D-CNN and baseline comparison | Pending — model script exists |
@@ -30,7 +30,7 @@ See the [roadmap](docs/roadmap.md) for completion criteria, [study progress](doc
 | Engineering and dataset study | Motor reports, dataset comparison and detailed CWRU study | Resolve source inconsistencies against recording metadata |
 | MATLAB exploration | Classification reports and original IR014, IR021 and IR028 plots | Preserve generating scripts and raw-file mapping |
 | Time-frequency methods | STFT, CWT and DWT study guide | Reproduce transforms and validate settings |
-| Python features | 9 statistical, 4 FFT and 3 Hilbert-envelope features | Preserve amplitude and validate band/wavelet features |
+| Python features | 9 statistical, 4 FFT and 3 Hilbert-envelope features | Validate feature definitions and add band/wavelet features |
 | Models | SVM, Random Forest and TensorFlow 1D-CNN scripts | Train and evaluate on independent recordings |
 | Dashboard | CSV/synthetic visualization and optional RF prediction | Integrate a validated model and enforce its input contract |
 
@@ -38,7 +38,9 @@ See the [roadmap](docs/roadmap.md) for completion criteria, [study progress](doc
 
 A [manifest-driven ingestion pipeline](docs/m4_implementation.md) now validates recording groups, file integrity, channels and signal quality, exports amplitude-preserving feature windows and separately normalized CNN windows, and retains window provenance. It includes anti-alias resampling, tests and a real-record CI example.
 
-**M4 remains in progress:** complete-cohort ingestion evidence is still being checked. Healthy DE rates are documented from experimental literature and resampled from 48 to 12 kHz. Candidate metadata is explicitly distinguished from verified locks. No classifier result is claimed.
+**M4 is complete for this cohort:** all 16 official recordings were acquired and hash-checked, yielding 881 train / 469 validation / 471 test windows across isolated recording groups. Healthy DE rates are documented from experimental literature and resampled from 48 to 12 kHz. All 13 tests and the full real-data CI job passed. No classifier result is claimed.
+
+See the [retained full-cohort summary](reports/m4/cohort/summary.json) and [real-record plot](reports/m4/first-real-record/record.png).
 
 ```bash
 pip install -r requirements-m4.txt

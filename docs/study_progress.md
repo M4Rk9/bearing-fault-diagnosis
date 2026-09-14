@@ -93,4 +93,4 @@ The correct current description is **completed foundational and exploratory stud
 
 ## Implementation follow-up — 14 September 2026
 
-The study review above remains a historical snapshot. See [M4 implementation and evidence](m4_implementation.md) for the new validated ingestion code, tests, reproduction commands and unresolved healthy-channel sampling metadata. No classifier result is claimed.
+The study review above remains a historical snapshot. See [M4 implementation and evidence](m4_implementation.md) for the new validated ingestion code, tests, reproduction commands, literature-documented healthy rates and successful 16-record preparation evidence. M4 is now complete for the selected cohort; no classifier result is claimed.
