@@ -136,6 +136,6 @@ Existing work: [MAT loader](../src/load_data.py), [preprocessing helpers](../src
 
 ## Next concrete work
 
-Continue M4 by reviewing real-record CI evidence, resolving healthy per-channel sampling metadata and recording a successful full-cohort preparation run. The manifest/group pipeline is now implemented. Do not treat scores from the current overlapping-window random split as completion of M6.
+Continue M4 by reviewing real-record CI evidence, applying the literature-documented healthy rate and recording a successful full-cohort preparation run. The manifest/group pipeline is now implemented. Do not treat scores from the current overlapping-window random split as completion of M6.
 
 To close a milestone, link its implementation commit, commands, tests and report here, record the completion date, and update the README table in the same change.

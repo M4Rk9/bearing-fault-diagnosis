@@ -38,7 +38,7 @@ See the [roadmap](docs/roadmap.md) for completion criteria, [study progress](doc
 
 A [manifest-driven ingestion pipeline](docs/m4_implementation.md) now validates recording groups, file integrity, channels and signal quality, exports amplitude-preserving feature windows and separately normalized CNN windows, and retains window provenance. It includes anti-alias resampling, tests and a real-record CI example.
 
-**M4 remains in progress:** healthy-channel sampling-rate provenance and complete-cohort ingestion evidence are still required. Candidate metadata is explicitly distinguished from verified locks. No classifier result is claimed.
+**M4 remains in progress:** complete-cohort ingestion evidence is still being checked. Healthy DE rates are documented from experimental literature and resampled from 48 to 12 kHz. Candidate metadata is explicitly distinguished from verified locks. No classifier result is claimed.
 
 ```bash
 pip install -r requirements-m4.txt

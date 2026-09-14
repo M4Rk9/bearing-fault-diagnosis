@@ -4,7 +4,7 @@ Implementation date: 14 September 2026. Base revision: `5197c8b4a919c9689931a1ca
 
 ## Status
 
-The manifest-driven pipeline and focused tests are implemented. **M4 remains in progress** until the selected four-class dataset is acquired, healthy-channel sampling metadata is resolved, and a complete preparation run is recorded. No model has been trained or scored by this work.
+The manifest-driven pipeline and focused tests are implemented. **M4 remains in progress** until the selected four-class dataset is acquired, the literature-documented healthy rate is applied, and a complete preparation run is recorded. No model has been trained or scored by this work.
 
 The real-record CI job downloads official recording 105 (IR007, 0 HP), validates the MAT channel, locks its hash, exports both preprocessing branches and plots a waveform/spectrum. Its success is evidence for one recording only. A green unit-test job is synthetic-fixture evidence, not a real-data result. CI saves downloadable evidence for 30 days; regenerate it using the commands below.
 
@@ -24,7 +24,7 @@ Acquisition preserves existing raw files, checks previously pinned hashes and re
 
 `--record-example` permits incomplete class coverage and explicitly sets `classification_ready: false`. Full preparation requires all four classes in each partition. That flag describes minimum class coverage only, not statistical validity or model readiness. The normal workflow never silently drops invalid records.
 
-## Selected cohort and unresolved metadata
+## Selected cohort and metadata provenance
 
 [data/manifests/cwru_007_candidates.json](../data/manifests/cwru_007_candidates.json) contains 16 **candidate** DE-channel records: healthy and 0.007-inch inner-race, ball and outer-race faults over 0–3 HP. Outer-race position is controlled at 6:00 according to the official 12 kHz table. The files and class/load mapping come from:
 
@@ -33,13 +33,13 @@ Acquisition preserves existing raw files, checks previously pinned hashes and re
 - https://engineering.case.edu/bearingdatacenter/apparatus-and-procedures
 - https://engineering.case.edu/bearingdatacenter/download-data-file
 
-Official download links use `https://engineering.case.edu/sites/default/files/<number>.mat`. Candidate channel keys must match actual MAT arrays; they are never inferred from arbitrary numeric arrays. The fault-table sampling rate applies to the selected DE channels. The normal-baseline table does not specify each channel's sampling rate, and the general apparatus page mentions both 12 and 48 kHz. Therefore healthy rates and their sources are null and **full preparation fails closed** until independently verified. File length or a renamed `12k` filename is insufficient evidence.
+Official download links use `https://engineering.case.edu/sites/default/files/<number>.mat`. Candidate channel keys must match actual MAT arrays; they are never inferred from arbitrary numeric arrays. The fault-table sampling rate applies to the selected DE channels. The normal-baseline table does not specify each channel's sampling rate, and the general apparatus page mentions both 12 and 48 kHz. This gap was resolved using Yoo, Jo and Ban (2023), *Sensors* 23(6), 3157, section 4.1 ([DOI](https://doi.org/10.3390/s23063157); [accessible full text](https://www.researchgate.net/publication/369319691_Lite_and_Efficient_Deep_Learning_Model_for_Bearing_Fault_Diagnosis_Using_the_CWRU_Dataset)). Their experimental description states that normal recordings were collected only at 48 kHz. Accordingly the four official healthy DE records are assigned 48,000 Hz and anti-alias resampled to 12,000 Hz. This is a literature-documented acquisition rate, not a rate embedded in MAT metadata or independently measured here. The manifest preserves that distinction. Missing rates or rate sources still cause preparation to fail. File length or a renamed filename is never used to select the rate.
 
 RPM in the candidate manifest is explicitly the table's approximate RPM. Preparation also extracts the recording's `XnnnRPM` scalar when present, separately, without overwriting the source approximation. Units and calibration remain explicitly unknown; plots do not invent g units. SKF is documented for the selected small seeded defects; unknown fault depth remains null.
 
 The frozen initial load split is 0/1 HP train, 2 HP validation, 3 HP test. This gives only two training recording groups and one validation/test recording per class. Later metrics would describe a very small cross-load benchmark, not industrial reliability or independent-bearing generalization. CWRU recordings may share the same physical bearing; recording isolation does not establish bearing isolation. No final-test scores should guide preprocessing or model selection.
 
-After resolving healthy metadata with evidence, acquire the complete candidate cohort to a new lock and prepare without `--record-example`:
+Acquire the complete cohort to a new lock and prepare without `--record-example`:
 
 ```bash
 python -m src.data_pipeline acquire --manifest data/manifests/cwru_007_candidates.json --output data/cohort.lock.json
@@ -65,7 +65,8 @@ The legacy `load_dataset()` API now fails explicitly because its output discards
 - [x] Window provenance, duration, tail counts and reproducible exports.
 - [x] Focused automated tests and real-record reproduction command/CI job.
 - [x] Confirm real-record CI evidence and retain its summary/hash in the repository.
-- [ ] Resolve healthy per-channel rates with provenance and acquire all selected records.
+- [x] Resolve healthy rates using documented experimental literature; retain the evidence basis.
+- [ ] Acquire all selected records and preserve their integrity hashes.
 - [ ] Record successful full-cohort ingestion and class/group coverage.
 
 Portfolio wording supported by implementation: "Implemented a manifest-driven CWRU ingestion pipeline with recording-level partitions, integrity checks, amplitude-preserving preprocessing and automated validation." Do not add classification accuracy, robustness or a completed M4 claim until the corresponding evidence exists.

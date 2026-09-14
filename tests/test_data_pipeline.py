@@ -43,8 +43,10 @@ class ManifestTests(unittest.TestCase):
             with self.subTest(changes=changes), self.assertRaises(ValueError):
                 validate_manifest([row(**changes)], require_coverage=False)
 
-    def test_candidates_fail_closed_on_healthy_sampling_rate(self):
+    def test_missing_healthy_sampling_rate_fails_closed(self):
         candidates = json.loads(Path('data/manifests/cwru_007_candidates.json').read_text())
+        validate_manifest(candidates, require_hash=False)
+        candidates[0]['sampling_rate_hz']=None
         with self.assertRaisesRegex(ValueError, 'sampling rate'):
             validate_manifest(candidates, require_hash=False)
 
