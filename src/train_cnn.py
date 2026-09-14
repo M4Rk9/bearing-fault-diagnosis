@@ -1,4 +1,4 @@
-"""Train a simple 1D-CNN on raw vibration windows."""
+"""Legacy CNN starter, blocked at the loader until M7 partition integration."""
 
 from __future__ import annotations
 

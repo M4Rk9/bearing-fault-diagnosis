@@ -1,0 +1,97 @@
+# M4 implementation and evidence
+
+Implementation date: 14 September 2026. Base revision: `5197c8b4a919c9689931a1ca2da885f2ab7a7b7e`.
+
+## Status
+
+**M4 is complete for the selected 16-record, four-class cohort.** The pipeline, 13 focused tests, locked official downloads, complete preparation run and real-record plot have passed. Healthy DE sampling uses an explicitly documented literature source. No model has been trained or scored by this work.
+
+The real-record CI job downloads official recording 105 (IR007, 0 HP), validates the MAT channel, locks its hash, exports both preprocessing branches and plots a waveform/spectrum. The job also acquires and prepares the full locked cohort; the waveform/spectrum example itself covers one recording. A green unit-test job is synthetic-fixture evidence, not a real-data result. CI saves downloadable evidence for 30 days. The reviewed summaries, locks and first-record plot are also committed below; regenerate them using the commands below.
+
+## Reproduce
+
+Use Python 3.11 or newer. The M4 dependencies are separate from the TensorFlow/dashboard environment:
+
+```bash
+pip install -r requirements-m4.txt
+python -m unittest discover -s tests -v
+python -m src.data_pipeline acquire --manifest data/manifests/real_record_example.json --output data/example.lock.json
+python -m src.data_pipeline prepare --manifest data/example.lock.json --output data/processed/real-example --record-example
+python -m src.plot_record --manifest data/example.lock.json --record-id cwru-105-DE --output data/processed/real-example/record.png
+```
+
+Acquisition preserves existing raw files, checks previously pinned hashes and rejects missing channels. A first acquisition records observed hashes; these are not independently published checksums from CWRU. A lock file must not already exist and a preparation output directory must be empty. To rerun, choose new output paths; raw files are reusable. Do not replace a trusted hash when integrity verification fails.
+
+`--record-example` permits incomplete class coverage and explicitly sets `classification_ready: false`. Full preparation requires all four classes in each partition. That flag describes minimum class coverage only, not statistical validity or model readiness. The normal workflow never silently drops invalid records.
+
+## Selected cohort and metadata provenance
+
+[data/manifests/cwru_007.lock.json](../data/manifests/cwru_007.lock.json) pins the acquired bytes for 16 DE-channel records: healthy and 0.007-inch inner-race, ball and outer-race faults over 0–3 HP. Outer-race position is controlled at 6:00 according to the official 12 kHz table. The files and class/load mapping come from:
+
+- https://engineering.case.edu/bearingdatacenter/12k-drive-end-bearing-fault-data
+- https://engineering.case.edu/bearingdatacenter/normal-baseline-data
+- https://engineering.case.edu/bearingdatacenter/apparatus-and-procedures
+- https://engineering.case.edu/bearingdatacenter/download-data-file
+
+Official download links use `https://engineering.case.edu/sites/default/files/<number>.mat`. Candidate channel keys must match actual MAT arrays; they are never inferred from arbitrary numeric arrays. The fault-table sampling rate applies to the selected DE channels. The normal-baseline table does not specify each channel's sampling rate, and the general apparatus page mentions both 12 and 48 kHz. This gap was resolved using Yoo, Jo and Ban (2023), *Sensors* 23(6), 3157, section 4.1 ([DOI](https://doi.org/10.3390/s23063157); [accessible full text](https://www.researchgate.net/publication/369319691_Lite_and_Efficient_Deep_Learning_Model_for_Bearing_Fault_Diagnosis_Using_the_CWRU_Dataset)). Their experimental description states that normal recordings were collected only at 48 kHz. Accordingly the four official healthy DE records are assigned 48,000 Hz and anti-alias resampled to 12,000 Hz. This is a literature-documented acquisition rate, not a rate embedded in MAT metadata or independently measured here. The manifest preserves that distinction. Missing rates or rate sources still cause preparation to fail. File length or a renamed filename is never used to select the rate.
+
+RPM in the manifest is explicitly the table's approximate RPM. Preparation also extracts the recording's `XnnnRPM` scalar when present, separately, without overwriting the source approximation. Units and calibration remain explicitly unknown; plots do not invent g units. SKF is documented for the selected small seeded defects; unknown fault depth remains null.
+
+The frozen initial load split is 0/1 HP train, 2 HP validation, 3 HP test. This gives only two training recording groups and one validation/test recording per class. Later metrics would describe a very small cross-load benchmark, not industrial reliability or independent-bearing generalization. CWRU recordings may share the same physical bearing; recording isolation does not establish bearing isolation. No final-test scores should guide preprocessing or model selection.
+
+Acquire the complete cohort to a new lock and prepare without `--record-example`:
+
+```bash
+python -m src.data_pipeline acquire --manifest data/manifests/cwru_007.lock.json --output data/cohort.lock.json
+python -m src.data_pipeline prepare --manifest data/cohort.lock.json --output data/processed/cohort-v1
+```
+
+## Processing contract
+
+- Required metadata, label semantics, explicit channel, finite real vectors, constants, signal length, hashes and group consistency are checked before output is written.
+- Groups are assigned in the manifest before any resampling/windowing. Each group has one partition. Different channels share a group. Identical raw files cannot be assigned new groups. A canonical float64 channel hash also detects identical signals repacked into different MAT files. Transformed/trimmed derivatives cannot be discovered reliably from hashes: their original group must be retained explicitly.
+- Whole-record resampling uses `scipy.signal.resample_poly`, a Kaiser beta-5 FIR and constant zero boundary padding. The rational rate ratio is reduced by its GCD. The finite-record edge treatment is recorded and may create edge transients; no extra bandpass is applied. The anti-alias test checks suppression of a 10 kHz tone when converting 48 to 12 kHz.
+- Default target rate is 12 kHz, window size 2048 (0.1706667 s), hop 1024. Incomplete tails are dropped and counted. Samples are never padded into extra windows or mixed across records.
+- Engineered-feature windows have their mean removed but retain amplitude. CNN windows divide that result by `max(population_std, 1e-8)`. Windows with standard deviation <= 1e-12 are rejected. Neither branch fits a dataset-level transform.
+- NPZ arrays contain `feature_windows`, `cnn_windows`, numeric `labels`, string `record_ids` and `group_ids`, and target-rate `start_samples` (end exclusive = start + window_size). Load with `allow_pickle=False`.
+- `summary.json` records manifest identity, partitions, file and signal hashes, source/target sample counts, measured RPM where available, tail counts, processing settings and dependency versions. `manifest.json` preserves the input lock.
+
+The legacy `load_dataset()` API now fails explicitly because its output discards recording partitions. Existing training entry points therefore stop instead of producing window-leaked results. Integrating the new partition files with validated features and model bundles belongs to M5–M7. The dashboard remains a separate unvalidated prototype.
+
+## Acceptance gate
+
+- [x] Explicit manifest schema, labels, group partition checks and integrity validation.
+- [x] Separate amplitude-preserving and normalized branches; anti-alias resampling.
+- [x] Window provenance, duration, tail counts and reproducible exports.
+- [x] Focused automated tests and real-record reproduction command/CI job.
+- [x] Confirm real-record CI evidence and retain its summary/hash in the repository.
+- [x] Resolve healthy rates using documented experimental literature; retain the evidence basis.
+- [x] Acquire all 16 selected records and preserve their integrity hashes.
+- [x] Record successful full-cohort ingestion and class/group coverage.
+
+Portfolio wording supported by implementation: "Implemented a manifest-driven CWRU ingestion pipeline with recording-level partitions, integrity checks, amplitude-preserving preprocessing and automated validation." M4 completion is supported for this cohort. Classification accuracy and robustness claims still require M5–M8 experiments.
+
+## Confirmed first real-record evidence
+
+[CI run 34847330407](https://github.com/M4Rk9/bearing-fault-diagnosis/actions/runs/34847330407) passed both jobs on head `43b69c9c34f7fbf9abe9c76af97f2f2c8583f05a` (PR test merge `a9af6c19d953b6ed17be7f5639c9c423a9c78ba5`). Downloaded artifact ZIP SHA-256: `e5db6f27c1b08588d021f146c008a0ab6174f7183a38fb5140c4e0f7e9efe070`.
+
+The original CI [summary](../reports/m4/first-real-record/summary.json), [manifest](../reports/m4/first-real-record/manifest.json), and [plot settings](../reports/m4/first-real-record/record.json) are retained unchanged. Recording 105 contains 121,265 DE samples at the source-table rate of 12,000 Hz, yielding 117 complete 2048-sample windows with 50% overlap and 433 unused trailing samples. The MAT RPM value is 1797. Raw-file SHA-256: `f80b0ea04fd06b372a0eaec7c056543ea37e4bb4727a5b173d2a5bacd2aa9cab`.
+
+![Official recording 105 waveform and spectrum](../reports/m4/first-real-record/record.png)
+
+This is an ingestion and visualization result, not fault-classification performance. The small waveform preview is not used to make a model claim. Newer summaries also include the pipeline source hash and per-class partition counts; the retained original summary predates those additive fields.
+
+## Confirmed full-cohort evidence
+
+[CI run 34847853740](https://github.com/M4Rk9/bearing-fault-diagnosis/actions/runs/34847853740) passed all 13 tests and full acquisition/preparation at head `6a336c4aee9050c19d6b4bbc4de74f7b5fc72753`. Artifact ZIP SHA-256: `4fef4982af4b7752985ac548cfa633e63edffb65c238346b373c3d239c71fb37`. The unchanged [summary](../reports/m4/cohort/summary.json) and [manifest](../reports/m4/cohort/manifest.json) are retained, including the pipeline source checksum and package versions. All 16 raw hashes match the committed input lock.
+
+| Partition | Loads (HP) | Recording groups | Normal windows | IR windows | Ball windows | OR windows | Total windows |
+|---|---|---|---|---|---|---|---|
+| Train | 0, 1 | 8 | 175 | 235 | 235 | 236 | 881 |
+| Validation | 2 | 4 | 117 | 118 | 117 | 117 | 469 |
+| Test | 3 | 4 | 117 | 119 | 117 | 118 | 471 |
+| Total | 0–3 | 16 | 409 | 472 | 469 | 471 | 1821 |
+
+All groups and raw/channel hashes are isolated between partitions. Counts refer to windows, not independent experimental replicates. Unequal recording durations produce unequal class support; later metrics must include macro-F1 and per-class support. Different original acquisition rates remain a potential confound even after resampling: M5 should inspect consistent analysis bandwidth and M8 must avoid overclaiming generalization.
+
+**Next milestone: M5.** Validate the 16 existing features against reference calculations using `feature_windows`, preserve recording/start-sample identifiers in the feature table, then add documented frequency/wavelet features and export a fixed schema. Leave model training and final-test scoring for M6.

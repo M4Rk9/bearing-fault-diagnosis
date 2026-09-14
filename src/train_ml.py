@@ -1,9 +1,8 @@
 """Train baseline ML models for bearing fault diagnosis.
 
-Before running:
-1. Download CWRU .mat files into data/raw/.
-2. Fill FILE_LABEL_MAP in src/load_data.py.
-3. Run: python src/train_ml.py
+This starter is blocked by the disabled legacy loader. Prepare partitioned data
+with python -m src.data_pipeline first. M5-M6 will integrate validated features
+and recording-level partitions before any classifier result is claimed.
 """
 
 from __future__ import annotations

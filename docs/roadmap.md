@@ -6,7 +6,7 @@ Status baseline: **13 September 2026**, based on code at `f7a8270b8da4f742f09f44
 
 Complete means the milestone's scoped deliverables have evidence. M1–M3 are study milestones: they do not certify reproducible numerical experiments, trained models or mastery of every paper. In progress means work exists but acceptance criteria are unmet. Pending can include starter code without validation.
 
-**Current milestone: M4.** Three of ten milestones have completed their study deliverables; this is not a percentage of effort or product readiness. Later-stage scripts do not bypass the data-validation gates.
+**Current milestone: M5 (next implementation).** M1–M3 completed their study deliverables. M4 completed its selected-cohort ingestion gate on 14 September 2026; see the [implementation evidence](m4_implementation.md). This is not a percentage of effort or product readiness.
 
 ## M1 — Engineering foundations
 
@@ -43,18 +43,20 @@ Evidence: [classification report](source_inventory.md), [STFT/DWT guide](source_
 
 ## M4 — Reproducible ingestion and preprocessing
 
-**Status: In progress — current milestone. Depends on M3.**
+**Status: Complete for the selected 16-record cohort — 14 September 2026. Depends on M3.**
+
+Implementation/evidence: [M4 pipeline, commands, 13 tests and real-data summaries](m4_implementation.md). Full-cohort validation passed at `6a336c4aee9050c19d6b4bbc4de74f7b5fc72753`. Healthy rates are literature-documented, not embedded MAT metadata.
 
 Existing work: [MAT loader](../src/load_data.py), [preprocessing helpers](../src/preprocessing.py), [implementation protocol](data_and_evaluation_protocol.md).
 
-- [ ] Obtain actual CWRU recordings from the official source.
-- [ ] Populate a validated manifest: file hash, source URL, class, defect size, load, RPM, sampling rate, channel and bearing end.
-- [ ] Verify healthy-record sampling metadata; detect missing keys, nonfinite values, duplicates, constant and short signals.
-- [ ] Assign complete recording groups to train/validation/test before segmentation; keep channels and copies of one recording together.
-- [ ] Preserve amplitude for engineered features; normalize CNN inputs separately.
-- [ ] Implement sampling-rate handling, anti-alias resampling where needed, and duration-aware window settings.
-- [ ] Retain processing scripts and a reproducible raw-record-to-plot example.
-- [ ] Test metadata validation, group isolation, window boundaries and normalization behaviour.
+- [x] Obtain actual CWRU recordings from the official source.
+- [x] Populate a validated manifest: file hash, source URL, class, defect size, load, RPM, sampling rate, channel and bearing end.
+- [x] Verify healthy-record sampling metadata; detect missing keys, nonfinite values, duplicates, constant and short signals.
+- [x] Assign complete recording groups to train/validation/test before segmentation; keep channels and copies of one recording together.
+- [x] Preserve amplitude for engineered features; normalize CNN inputs separately.
+- [x] Implement sampling-rate handling, anti-alias resampling where needed, and duration-aware window settings.
+- [x] Retain processing scripts and a reproducible raw-record-to-plot example.
+- [x] Test metadata validation, group isolation, window boundaries and normalization behaviour.
 
 **Acceptance evidence:** manifest metadata, ingestion summary, split membership, hashes, commands, meaningful passing tests and a reproducible real-record example. Raw data can remain outside Git. No classifier score is needed to finish M4.
 
@@ -134,6 +136,6 @@ Existing work: [MAT loader](../src/load_data.py), [preprocessing helpers](../src
 
 ## Next concrete work
 
-Begin M4 by obtaining raw recordings, resolving their metadata and implementing the manifest/group split. Do not treat scores from the current overlapping-window random split as completion of M6.
+Begin M5 by validating the existing statistical, FFT and envelope feature definitions on the amplitude-preserving M4 windows. Preserve group/record/window identifiers in the exported feature table. Do not train or tune against final-test scores before the M5 acceptance gate.
 
 To close a milestone, link its implementation commit, commands, tests and report here, record the completion date, and update the README table in the same change.

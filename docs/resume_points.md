@@ -12,3 +12,9 @@ Birla Institute of Technology, Mesra | MATLAB, Python, NumPy, SciPy, scikit-lear
 - Developing a Python classification pipeline with signal segmentation, 16 statistical and spectral features, and SVM/Random Forest training scripts.
 
 The [roadmap](roadmap.md) and [study inventory](source_inventory.md) support these scoped claims. No classification accuracy, deployed system, validated CNN, remaining-useful-life estimate or maintenance savings has been established. Describe individual contributions accurately within the group work.
+
+## M4 implementation — 14 September 2026
+
+- Implemented and tested a reproducible CWRU ingestion pipeline for 16 recordings across four bearing conditions, with SHA-256 provenance, recording-isolated partitions, anti-alias resampling and separate feature/CNN preprocessing; validated 1,821 windows with automated CI.
+
+Evidence: [M4 implementation and real-data summaries](m4_implementation.md). No model-performance claim is supported yet.

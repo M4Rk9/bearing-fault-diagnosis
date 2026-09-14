@@ -1,0 +1,25 @@
+[
+  {
+    "record_id": "cwru-105-DE",
+    "group_id": "cwru-105",
+    "relative_path": "105.mat",
+    "sha256": "f80b0ea04fd06b372a0eaec7c056543ea37e4bb4727a5b173d2a5bacd2aa9cab",
+    "source_url": "https://engineering.case.edu/sites/default/files/105.mat",
+    "class_name": "inner_race",
+    "fault_diameter_in": 0.007,
+    "fault_depth_in": null,
+    "manufacturer": "SKF",
+    "load_hp": 0,
+    "rpm": 1797,
+    "rpm_source": "official table; approximate, not measured MAT RPM",
+    "faulted_bearing_end": "DE",
+    "channel_key": "X105_DE_time",
+    "sensor_end": "DE",
+    "sampling_rate_hz": 12000,
+    "sampling_rate_source": "https://engineering.case.edu/bearingdatacenter/12k-drive-end-bearing-fault-data",
+    "outer_race_position": null,
+    "units": "unknown",
+    "calibration_source": null,
+    "partition": "train"
+  }
+]
