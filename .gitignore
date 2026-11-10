@@ -63,3 +63,10 @@ models/*
 # IDE
 .vscode/
 .idea/
+
+# Reproducible feature dataset arrays and provenance
+/Datasets/Features/*/Clean/
+/Datasets/Features/*/Noisy/
+/Datasets/Features/*/index.csv
+/Datasets/Features/dataset.json
+/Datasets/Features/.export.lock
