@@ -6,7 +6,7 @@ The objective is to identify **healthy, inner-race, ball and outer-race** condit
 
 ## Where we are
 
-**Updated 14 September 2026: M1–M3 complete for their study deliverables; M4 complete for the selected 16-record cohort; M5 next.** We have studied the motor and bearings, documented the dataset and literature, and interpreted MATLAB plots. Initial feature-extraction, training and dashboard code exists, but there are no verified model-training results.
+**Updated 10 November 2026.** M1–M3 study deliverables and the M4 16-record ingestion cohort are complete. The [STFT and DWT audit](docs/stft_dwt_audit.md) identifies labeling errors in the uploaded plots and documents a reproducible four-class CNN pilot.
 
 | Milestone | Deliverable | Status |
 |---|---|---|
@@ -14,9 +14,9 @@ The objective is to identify **healthy, inner-race, ball and outer-race** condit
 | M2 | CWRU dataset selection and literature study | Complete — study |
 | M3 | MATLAB signal interpretation and time-frequency study | Complete — exploratory study |
 | M4 | Reproducible ingestion and preprocessing | **Complete — 16 recordings, 1,821 windows, passing CI** |
-| M5 | Validated statistical, spectral and wavelet features | Pending — initial features exist |
+| M5 | Validated statistical, spectral and wavelet features | STFT/DWT pilot implemented. Broader feature validation pending. |
 | M6 | Evaluated SVM and Random Forest baselines | Pending — training scripts exist |
-| M7 | Evaluated 1D-CNN and baseline comparison | Pending — model script exists |
+| M7 | Evaluated 1D-CNN and baseline comparison | 0.007-inch CNN pilot evaluated. Baseline comparison pending. |
 | M8 | Cross-condition robustness and error analysis | Pending |
 | M9 | Validated inference and dashboard integration | Pending — prototype exists |
 | M10 | Reproducible academic release and presentation | Pending |
@@ -29,16 +29,16 @@ See the [roadmap](docs/roadmap.md) for completion criteria, [study progress](doc
 |---|---|---|
 | Engineering and dataset study | Motor reports, dataset comparison and detailed CWRU study | Resolve source inconsistencies against recording metadata |
 | MATLAB exploration | Classification reports and original IR014, IR021 and IR028 plots | Preserve generating scripts and raw-file mapping |
-| Time-frequency methods | STFT, CWT and DWT study guide | Reproduce transforms and validate settings |
+| Time-frequency methods | STFT, CWT and DWT study guide, plus reproducible STFT/DWT for the pilot | Recover settings and provenance for legacy plots |
 | Python features | 9 statistical, 4 FFT and 3 Hilbert-envelope features | Validate feature definitions and add band/wavelet features |
-| Models | SVM, Random Forest and TensorFlow 1D-CNN scripts | Train and evaluate on independent recordings |
+| Models | SVM and Random Forest starter scripts, plus TensorFlow 1D-CNN pilot | Compare models and test beyond the pilot cohort |
 | Dashboard | CSV/synthetic visualization and optional RF prediction | Integrate a validated model and enforce its input contract |
 
 ## M4 implementation update — 14 September 2026
 
 A [manifest-driven ingestion pipeline](docs/m4_implementation.md) now validates recording groups, file integrity, channels and signal quality, exports amplitude-preserving feature windows and separately normalized CNN windows, and retains window provenance. It includes anti-alias resampling, tests and a real-record CI example.
 
-**M4 is complete for this cohort:** all 16 official recordings were acquired and hash-checked, yielding 881 train / 469 validation / 471 test windows across isolated recording groups. Healthy DE rates are documented from experimental literature and resampled from 48 to 12 kHz. All 13 tests and the full real-data CI job passed. No classifier result is claimed.
+**M4 is complete for this cohort:** all 16 official recordings were acquired and hash-checked, yielding 881 train / 469 validation / 471 test windows across isolated recording groups. Healthy DE rates are documented from experimental literature and resampled from 48 to 12 kHz. All 13 M4 tests and the full real-data CI job passed.
 
 See the [retained full-cohort summary](reports/m4/cohort/summary.json) and [real-record plot](reports/m4/first-real-record/record.png).
 
@@ -64,7 +64,7 @@ streamlit run dashboard/app.py
 
 The dashboard displays a synthetic demonstration or numeric CSV without a trained model. Predictions require `models/random_forest.pkl`; synthetic input is not evidence of diagnostic accuracy.
 
-Existing training entry points are `python src/train_ml.py` and `python src/train_cnn.py`. These starter scripts now stop at the disabled legacy loader; use the M4 commands above for data preparation. Model integration is pending.
+Run the CNN pilot with `python -m src.train_cnn` from the repository root. The command uses the uploaded raw files and prints window- and recording-level test metrics. The [CNN notebook](notebooks/05_cnn_model.ipynb) also plots the numeric features for all four classes. The SVM and Random Forest starter still uses the disabled legacy loader.
 
 ## Project resources
 
@@ -77,4 +77,4 @@ Existing training entry points are `python src/train_ml.py` and `python src/trai
 - [Notebook plan](notebooks/README.md)
 - [CWRU Bearing Data Center](https://engineering.case.edu/bearingdatacenter/welcome)
 
-Raw datasets, generated models and original uploaded reports/images remain outside Git. This update publishes original repository documentation summarizing the supplied study, plus a source inventory; it does not redistribute the attachments.
+The uploaded recordings and exploratory plots are under [Datasets](Datasets). Generated model files and prepared arrays stay outside Git.
