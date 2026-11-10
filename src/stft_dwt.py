@@ -7,21 +7,21 @@ from scipy.signal import stft
 
 SAMPLE_RATE = 12_000
 WINDOW_SAMPLES = 2048
-FRAME_SAMPLES = 256
-FRAME_HOP = 128
+FRAME_SAMPLES = 512
+FRAME_HOP = 64
 FREQUENCY_BINS = FRAME_SAMPLES // 2 + 1
 WAVELET = "db4"
-DWT_LEVEL = 4
+DWT_LEVEL = 5
 DWT_MODE = "symmetric"
-DWT_BANDS = ("A4", "D4", "D3", "D2", "D1")
+DWT_BANDS = ("A5", "D5", "D4", "D3", "D2", "D1")
 POWER_FLOOR = 1e-12
 
 
 def extract_sequences(windows):
-    """Return (windows, time frames, 129 STFT bins + 5 DWT bands).
+    """Return (windows, time frames, 257 STFT bins + 6 DWT bands).
 
     Input windows are mean-centered, amplitude-preserving samples at 12 kHz.
-    Each DWT uses the same 256 raw samples as its corresponding Hann STFT
+    Each DWT uses the same 512 raw samples as its corresponding Hann STFT
     frame. DWT bands contain mean squared coefficients, with no Hann taper.
     Both sets of powers are converted to dB relative to one squared unit.
     """

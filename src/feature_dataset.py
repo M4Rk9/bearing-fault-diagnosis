@@ -29,7 +29,11 @@ WINDOW_HOP = WINDOW_SAMPLES // 2
 FRAME_COUNT = 1 + (WINDOW_SAMPLES - FRAME_SAMPLES) // FRAME_HOP
 DEFAULT_SNR_DB = 10.0
 DEFAULT_NOISE_SEED = 42
-SCHEMA = "cwru-stft-dwt-paired-v1"
+SCHEMA = "cwru-stft-dwt-paired-v2"
+FEATURE_SHAPES = {
+    SCHEMA: (FRAME_COUNT, FREQUENCY_BINS, len(DWT_BANDS)),
+    "cwru-stft-dwt-paired-v1": (15, 129, 5),
+}
 
 
 def prepare_uploaded_cohort(raw_dir, output):
@@ -154,8 +158,10 @@ def load_partitions(dataset):
     if not metadata_path.is_file():
         raise FileNotFoundError(f"No complete dataset at {dataset}. Run python -m src.feature_dataset first.")
     metadata = json.loads(metadata_path.read_text())
-    if metadata.get("schema") != SCHEMA:
+    shape = FEATURE_SHAPES.get(metadata.get("schema"))
+    if shape is None:
         raise ValueError(f"Unsupported feature dataset format: {metadata_path}")
+    frame_count, stft_bins, dwt_bands = shape
 
     parts = {split: {variant: [] for variant in VARIANTS} for split in PARTITIONS}
     groups_seen, windows_seen = {}, set()
@@ -176,8 +182,8 @@ def load_partitions(dataset):
             path = folder / variant
             stft = read_array(path, "stft")
             dwt = read_array(path, "dwt")
-            if (stft.shape != (len(rows), FRAME_COUNT, FREQUENCY_BINS)
-                    or dwt.shape != (len(rows), FRAME_COUNT, len(DWT_BANDS))
+            if (stft.shape != (len(rows), frame_count, stft_bins)
+                    or dwt.shape != (len(rows), frame_count, dwt_bands)
                     or stft.dtype != np.float32 or dwt.dtype != np.float32
                     or not np.isfinite(stft).all() or not np.isfinite(dwt).all()):
                 raise ValueError(f"Invalid or misaligned feature arrays in {path}")
