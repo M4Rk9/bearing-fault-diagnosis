@@ -19,7 +19,7 @@ All 16 pilot raw files match the existing locked SHA-256 hashes. `Normal_2.mat` 
 
 ## Reproduce the pilot
 
-From the repository root, install `python -m pip install -r requirements.txt` and run `python -m src.train_cnn`. You can also run [the notebook](../notebooks/05_cnn_model.ipynb) to inspect the waveform, STFT and DWT plots for all four classes. The CLI prints held-out metrics and saves `models/stft_dwt_1d_cnn.keras`. Inference with this model takes the output of `src.stft_dwt.extract_sequences` using the same vibration-window preparation.
+The results below are from the original clean-only pilot in [PR #6](https://github.com/M4Rk9/bearing-fault-diagnosis/pull/6). For the current clean/noisy workflow, follow the [feature dataset instructions](../Datasets/Features) or run the [current notebook](../notebooks/05_cnn_model.ipynb).
 
 The first experiment uses the previously locked cohort of 16 recordings. Faults are 0.007 inch and the outer-race position is fixed at 6 o'clock. The 0 and 1 HP recordings train the model, the 2 HP recordings select weights by validation loss, and the 3 HP recordings supply the test. All overlapping windows from an original recording stay together.
 

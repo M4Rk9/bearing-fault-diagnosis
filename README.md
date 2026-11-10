@@ -64,7 +64,7 @@ streamlit run dashboard/app.py
 
 The dashboard displays a synthetic demonstration or numeric CSV without a trained model. Predictions require `models/random_forest.pkl`; synthetic input is not evidence of diagnostic accuracy.
 
-Run the CNN pilot with `python -m src.train_cnn` from the repository root. The command uses the uploaded raw files and prints window- and recording-level test metrics. The [CNN notebook](notebooks/05_cnn_model.ipynb) also plots the numeric features for all four classes. The SVM and Random Forest starter still uses the disabled legacy loader.
+Build the [four-class feature dataset](Datasets/Features) with `python -m src.feature_dataset`, then run `python -m src.train_cnn` from the repository root. The model trains on the exported clean and noisy STFT/DWT features and reports test metrics for each variant. The [CNN notebook](notebooks/05_cnn_model.ipynb) also plots paired examples for all four classes. The SVM and Random Forest starter still uses the disabled legacy loader.
 
 ## Project resources
 

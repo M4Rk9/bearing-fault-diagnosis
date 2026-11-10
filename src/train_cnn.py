@@ -1,52 +1,20 @@
-"""Train the STFT + DWT 1D-CNN on the uploaded, locked CWRU 0.007-inch cohort."""
+"""Train the STFT + DWT 1D-CNN on the exported clean and noisy features."""
 
 from __future__ import annotations
 
 import argparse
 import json
 from pathlib import Path
-from tempfile import TemporaryDirectory
 
 import numpy as np
 import tensorflow as tf
 from sklearn.metrics import accuracy_score, confusion_matrix, f1_score
 
-from .data_pipeline import CLASSES, PARTITIONS, prepare
-from .stft_dwt import SAMPLE_RATE, WINDOW_SAMPLES, extract_sequences
+from .data_pipeline import CLASSES
+from .feature_dataset import FEATURES_DIR, REPO_ROOT, VARIANTS, load_partitions
 
-REPO_ROOT = Path(__file__).resolve().parents[1]
-RAW_DIR = REPO_ROOT / "Datasets" / "RAW" / "CWRU Dataset"
-MANIFEST = REPO_ROOT / "data" / "manifests" / "cwru_007.lock.json"
-UPLOADED_FILES = {
-    "normal": "Normal Baseline Data/Normal_{load}.mat",
-    "inner_race": "Inner Race/IR007_{load}.mat",
-    "ball": "Ball/B007_{load}.mat",
-    "outer_race": "OuterRace/OR007@6_{load}.mat",
-}
 RANDOM_STATE = 42
-MODEL_PATH = REPO_ROOT / "models" / "stft_dwt_1d_cnn.keras"
-
-
-def prepare_uploaded_cohort(raw_dir, output):
-    """Map the locked records to their uploaded names and reuse M4 validation."""
-    rows = json.loads(MANIFEST.read_text())
-    for row in rows:
-        row["relative_path"] = UPLOADED_FILES[row["class_name"]].format(load=row["load_hp"])
-    return prepare(rows, raw_dir, output, target_rate=SAMPLE_RATE,
-                   window_size=WINDOW_SAMPLES, hop_size=WINDOW_SAMPLES // 2)
-
-
-def load_partitions(prepared_dir):
-    """Extract the same time features separately within the existing splits."""
-    partitions = {}
-    for name in PARTITIONS:
-        with np.load(Path(prepared_dir) / f"{name}.npz", allow_pickle=False) as data:
-            partitions[name] = (
-                extract_sequences(data["feature_windows"]),
-                data["labels"],
-                data["group_ids"],
-            )
-    return partitions
+MODEL_PATH = REPO_ROOT / "models" / "stft_dwt_clean_noisy_1d_cnn.keras"
 
 
 def build_1d_cnn(input_shape, normalization, num_classes=len(CLASSES)):
@@ -68,9 +36,11 @@ def build_1d_cnn(input_shape, normalization, num_classes=len(CLASSES)):
 
 
 def fit_model(partitions, epochs=10, verbose=2):
-    """Fit normalization on train and select weights using validation loss."""
-    x_train, y_train, _ = partitions["train"]
-    x_val, y_val, _ = partitions["validation"]
+    """Fit on both training variants and select weights using both validation variants."""
+    x_train, y_train = (np.concatenate([partitions["train"][variant][column] for variant in VARIANTS])
+                        for column in (0, 1))
+    x_val, y_val = (np.concatenate([partitions["validation"][variant][column] for variant in VARIANTS])
+                    for column in (0, 1))
     tf.keras.utils.set_random_seed(RANDOM_STATE)
     normalization = tf.keras.layers.Normalization(axis=-1)
     normalization.adapt(x_train)
@@ -124,18 +94,19 @@ def evaluate_test(model, test_partition):
 
 def main():
     parser = argparse.ArgumentParser(description=__doc__)
+    parser.add_argument("--dataset", type=Path, default=FEATURES_DIR)
     parser.add_argument("--epochs", type=int, default=10)
     parser.add_argument("--output", type=Path, default=MODEL_PATH, help="Output .keras model")
     args = parser.parse_args()
     if args.epochs < 1 or args.output.suffix != ".keras":
         parser.error("Use a positive epoch count and an output ending in .keras")
 
-    with TemporaryDirectory() as directory:
-        summary = prepare_uploaded_cohort(RAW_DIR, directory)
-        partitions = load_partitions(directory)
-    print("Windows:", {p: summary["partitions"][p]["windows"] for p in PARTITIONS})
+    partitions = load_partitions(args.dataset)
+    print("Window pairs:", {split: len(variants["Clean"][1])
+                            for split, variants in partitions.items()})
     model, _ = fit_model(partitions, epochs=args.epochs)
-    print(json.dumps(evaluate_test(model, partitions["test"]), indent=2))
+    results = {variant: evaluate_test(model, partitions["test"][variant]) for variant in VARIANTS}
+    print(json.dumps(results, indent=2))
     args.output.parent.mkdir(parents=True, exist_ok=True)
     model.save(args.output)
     print(f"Saved model to {args.output}")
