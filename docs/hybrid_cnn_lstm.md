@@ -43,4 +43,4 @@ Outputs under `models/hybrid/`:
 - `results.json`: training history, class order, group counts, window and recording accuracy, macro-F1, confusion matrices and individual recording predictions, separately for clean and noisy test windows.
 - `stft_dwt_baseline.keras` when `--baseline` is used.
 
-No measured accuracy is claimed until the full check and training run complete. The test set is held out from model fitting and early stopping; report both window-level and recording-level performance. This experiment evaluates cross-load performance on CWRU, not deployment accuracy on arbitrary bearings.
+A complete local experiment was reported on 26 November 2026. See the [archived measured results](../reports/hybrid/2026-11-26/README.md) and [original trained-model artifacts](https://drive.google.com/drive/folders/1RCVT_pJwR7g_njQP1bRmwgwDp3ilPkZb). The test set is held out from model fitting and early stopping; report both window-level and recording-level performance. This experiment evaluates cross-load performance on CWRU, not deployment accuracy on arbitrary bearings.

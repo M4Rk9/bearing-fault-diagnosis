@@ -1,0 +1,1056 @@
+{
+  "seed": 42,
+  "tensorflow_version": "2.21.0",
+  "manifest_sha256": "7a6fc1737e3e21667a3cd615c05a464fc67eceab5a9d32101c085c0f671fcea0",
+  "class_ids": {
+    "normal": 0,
+    "inner_race": 1,
+    "ball": 2,
+    "outer_race": 3
+  },
+  "partition_counts": {
+    "train": {
+      "Clean": {
+        "windows": 2689,
+        "groups": 20
+      },
+      "Noisy": {
+        "windows": 2689,
+        "groups": 20
+      }
+    },
+    "validation": {
+      "Clean": {
+        "windows": 1449,
+        "groups": 10
+      },
+      "Noisy": {
+        "windows": 1449,
+        "groups": 10
+      }
+    },
+    "test": {
+      "Clean": {
+        "windows": 1454,
+        "groups": 10
+      },
+      "Noisy": {
+        "windows": 1454,
+        "groups": 10
+      }
+    }
+  },
+  "history": {
+    "accuracy": [
+      0.9274823069572449,
+      0.9996281266212463,
+      0.9998140335083008,
+      1.0,
+      1.0,
+      1.0,
+      1.0,
+      1.0,
+      0.9998140335083008,
+      1.0,
+      1.0,
+      0.9998140335083008,
+      1.0,
+      0.9998140335083008,
+      1.0
+    ],
+    "loss": [
+      0.19228699803352356,
+      0.003266255371272564,
+      0.001396938576363027,
+      0.0006397112738341093,
+      0.00034008824150078,
+      0.0003988959942944348,
+      0.00015032399096526206,
+      0.00011196779814781621,
+      0.0003339017275720835,
+      0.0001486820401623845,
+      0.00014290834951680154,
+      0.0006359479739330709,
+      0.00017850617587100714,
+      0.00030254796729423106,
+      0.0001684425660641864
+    ],
+    "val_accuracy": [
+      1.0,
+      1.0,
+      1.0,
+      1.0,
+      1.0,
+      0.9993098974227905,
+      1.0,
+      1.0,
+      1.0,
+      1.0,
+      1.0,
+      1.0,
+      1.0,
+      1.0,
+      1.0
+    ],
+    "val_loss": [
+      0.001331264735199511,
+      0.00033806622377596796,
+      0.0008568403427489102,
+      0.00018714350881054997,
+      0.00018633154104463756,
+      0.0020038513466715813,
+      0.0008455776260234416,
+      0.0005526162567548454,
+      0.00021038380509708077,
+      0.00011868779984069988,
+      0.00016314371896442026,
+      0.0002915336808655411,
+      0.0002088617766276002,
+      0.00019999165670014918,
+      0.0001429392577847466
+    ],
+    "learning_rate": [
+      0.0010000000474974513,
+      0.0010000000474974513,
+      0.0010000000474974513,
+      0.0010000000474974513,
+      0.0010000000474974513,
+      0.0010000000474974513,
+      0.0005000000237487257,
+      0.0005000000237487257,
+      0.0002500000118743628,
+      0.0002500000118743628,
+      0.0001250000059371814,
+      0.0001250000059371814,
+      6.25000029685907e-05,
+      6.25000029685907e-05,
+      3.125000148429535e-05
+    ]
+  },
+  "hybrid": {
+    "Clean": {
+      "class_order": [
+        "normal",
+        "inner_race",
+        "ball",
+        "outer_race"
+      ],
+      "windows": {
+        "count": 1454,
+        "accuracy": 1.0,
+        "macro_f1": 1.0,
+        "confusion_matrix": [
+          [
+            402,
+            0,
+            0,
+            0
+          ],
+          [
+            0,
+            351,
+            0,
+            0
+          ],
+          [
+            0,
+            0,
+            350,
+            0
+          ],
+          [
+            0,
+            0,
+            0,
+            351
+          ]
+        ],
+        "classification_report": {
+          "normal": {
+            "precision": 1.0,
+            "recall": 1.0,
+            "f1-score": 1.0,
+            "support": 402.0
+          },
+          "inner_race": {
+            "precision": 1.0,
+            "recall": 1.0,
+            "f1-score": 1.0,
+            "support": 351.0
+          },
+          "ball": {
+            "precision": 1.0,
+            "recall": 1.0,
+            "f1-score": 1.0,
+            "support": 350.0
+          },
+          "outer_race": {
+            "precision": 1.0,
+            "recall": 1.0,
+            "f1-score": 1.0,
+            "support": 351.0
+          },
+          "accuracy": 1.0,
+          "macro avg": {
+            "precision": 1.0,
+            "recall": 1.0,
+            "f1-score": 1.0,
+            "support": 1454.0
+          },
+          "weighted avg": {
+            "precision": 1.0,
+            "recall": 1.0,
+            "f1-score": 1.0,
+            "support": 1454.0
+          }
+        },
+        "loss": 0.001823265920393169
+      },
+      "recordings": {
+        "count": 10,
+        "accuracy": 1.0,
+        "macro_f1": 1.0,
+        "confusion_matrix": [
+          [
+            1,
+            0,
+            0,
+            0
+          ],
+          [
+            0,
+            3,
+            0,
+            0
+          ],
+          [
+            0,
+            0,
+            3,
+            0
+          ],
+          [
+            0,
+            0,
+            0,
+            3
+          ]
+        ],
+        "classification_report": {
+          "normal": {
+            "precision": 1.0,
+            "recall": 1.0,
+            "f1-score": 1.0,
+            "support": 1.0
+          },
+          "inner_race": {
+            "precision": 1.0,
+            "recall": 1.0,
+            "f1-score": 1.0,
+            "support": 3.0
+          },
+          "ball": {
+            "precision": 1.0,
+            "recall": 1.0,
+            "f1-score": 1.0,
+            "support": 3.0
+          },
+          "outer_race": {
+            "precision": 1.0,
+            "recall": 1.0,
+            "f1-score": 1.0,
+            "support": 3.0
+          },
+          "accuracy": 1.0,
+          "macro avg": {
+            "precision": 1.0,
+            "recall": 1.0,
+            "f1-score": 1.0,
+            "support": 10.0
+          },
+          "weighted avg": {
+            "precision": 1.0,
+            "recall": 1.0,
+            "f1-score": 1.0,
+            "support": 10.0
+          }
+        },
+        "loss": 0.0021560026798397303
+      },
+      "record_predictions": [
+        {
+          "group_id": "cwru-100",
+          "class": "normal",
+          "predicted": "normal",
+          "windows": 402
+        },
+        {
+          "group_id": "cwru-108",
+          "class": "inner_race",
+          "predicted": "inner_race",
+          "windows": 118
+        },
+        {
+          "group_id": "cwru-121",
+          "class": "ball",
+          "predicted": "ball",
+          "windows": 116
+        },
+        {
+          "group_id": "cwru-133",
+          "class": "outer_race",
+          "predicted": "outer_race",
+          "windows": 117
+        },
+        {
+          "group_id": "cwru-172",
+          "class": "inner_race",
+          "predicted": "inner_race",
+          "windows": 116
+        },
+        {
+          "group_id": "cwru-188",
+          "class": "ball",
+          "predicted": "ball",
+          "windows": 117
+        },
+        {
+          "group_id": "cwru-200",
+          "class": "outer_race",
+          "predicted": "outer_race",
+          "windows": 117
+        },
+        {
+          "group_id": "cwru-212",
+          "class": "inner_race",
+          "predicted": "inner_race",
+          "windows": 117
+        },
+        {
+          "group_id": "cwru-225",
+          "class": "ball",
+          "predicted": "ball",
+          "windows": 117
+        },
+        {
+          "group_id": "cwru-237",
+          "class": "outer_race",
+          "predicted": "outer_race",
+          "windows": 117
+        }
+      ]
+    },
+    "Noisy": {
+      "class_order": [
+        "normal",
+        "inner_race",
+        "ball",
+        "outer_race"
+      ],
+      "windows": {
+        "count": 1454,
+        "accuracy": 0.9669876203576341,
+        "macro_f1": 0.965651376146789,
+        "confusion_matrix": [
+          [
+            402,
+            0,
+            0,
+            0
+          ],
+          [
+            0,
+            303,
+            0,
+            48
+          ],
+          [
+            0,
+            0,
+            350,
+            0
+          ],
+          [
+            0,
+            0,
+            0,
+            351
+          ]
+        ],
+        "classification_report": {
+          "normal": {
+            "precision": 1.0,
+            "recall": 1.0,
+            "f1-score": 1.0,
+            "support": 402.0
+          },
+          "inner_race": {
+            "precision": 1.0,
+            "recall": 0.8632478632478633,
+            "f1-score": 0.926605504587156,
+            "support": 351.0
+          },
+          "ball": {
+            "precision": 1.0,
+            "recall": 1.0,
+            "f1-score": 1.0,
+            "support": 350.0
+          },
+          "outer_race": {
+            "precision": 0.8796992481203008,
+            "recall": 1.0,
+            "f1-score": 0.936,
+            "support": 351.0
+          },
+          "accuracy": 0.9669876203576341,
+          "macro avg": {
+            "precision": 0.9699248120300752,
+            "recall": 0.9658119658119658,
+            "f1-score": 0.965651376146789,
+            "support": 1454.0
+          },
+          "weighted avg": {
+            "precision": 0.9709590344499489,
+            "recall": 0.9669876203576341,
+            "f1-score": 0.9668325530330755,
+            "support": 1454.0
+          }
+        },
+        "loss": 0.0644119530916214
+      },
+      "recordings": {
+        "count": 10,
+        "accuracy": 1.0,
+        "macro_f1": 1.0,
+        "confusion_matrix": [
+          [
+            1,
+            0,
+            0,
+            0
+          ],
+          [
+            0,
+            3,
+            0,
+            0
+          ],
+          [
+            0,
+            0,
+            3,
+            0
+          ],
+          [
+            0,
+            0,
+            0,
+            3
+          ]
+        ],
+        "classification_report": {
+          "normal": {
+            "precision": 1.0,
+            "recall": 1.0,
+            "f1-score": 1.0,
+            "support": 1.0
+          },
+          "inner_race": {
+            "precision": 1.0,
+            "recall": 1.0,
+            "f1-score": 1.0,
+            "support": 3.0
+          },
+          "ball": {
+            "precision": 1.0,
+            "recall": 1.0,
+            "f1-score": 1.0,
+            "support": 3.0
+          },
+          "outer_race": {
+            "precision": 1.0,
+            "recall": 1.0,
+            "f1-score": 1.0,
+            "support": 3.0
+          },
+          "accuracy": 1.0,
+          "macro avg": {
+            "precision": 1.0,
+            "recall": 1.0,
+            "f1-score": 1.0,
+            "support": 10.0
+          },
+          "weighted avg": {
+            "precision": 1.0,
+            "recall": 1.0,
+            "f1-score": 1.0,
+            "support": 10.0
+          }
+        },
+        "loss": 0.057061292231082916
+      },
+      "record_predictions": [
+        {
+          "group_id": "cwru-100",
+          "class": "normal",
+          "predicted": "normal",
+          "windows": 402
+        },
+        {
+          "group_id": "cwru-108",
+          "class": "inner_race",
+          "predicted": "inner_race",
+          "windows": 118
+        },
+        {
+          "group_id": "cwru-121",
+          "class": "ball",
+          "predicted": "ball",
+          "windows": 116
+        },
+        {
+          "group_id": "cwru-133",
+          "class": "outer_race",
+          "predicted": "outer_race",
+          "windows": 117
+        },
+        {
+          "group_id": "cwru-172",
+          "class": "inner_race",
+          "predicted": "inner_race",
+          "windows": 116
+        },
+        {
+          "group_id": "cwru-188",
+          "class": "ball",
+          "predicted": "ball",
+          "windows": 117
+        },
+        {
+          "group_id": "cwru-200",
+          "class": "outer_race",
+          "predicted": "outer_race",
+          "windows": 117
+        },
+        {
+          "group_id": "cwru-212",
+          "class": "inner_race",
+          "predicted": "inner_race",
+          "windows": 117
+        },
+        {
+          "group_id": "cwru-225",
+          "class": "ball",
+          "predicted": "ball",
+          "windows": 117
+        },
+        {
+          "group_id": "cwru-237",
+          "class": "outer_race",
+          "predicted": "outer_race",
+          "windows": 117
+        }
+      ]
+    }
+  },
+  "baseline": {
+    "Clean": {
+      "class_order": [
+        "normal",
+        "inner_race",
+        "ball",
+        "outer_race"
+      ],
+      "windows": {
+        "count": 1454,
+        "accuracy": 0.9786795048143053,
+        "macro_f1": 0.9778199031467628,
+        "confusion_matrix": [
+          [
+            402,
+            0,
+            0,
+            0
+          ],
+          [
+            0,
+            320,
+            2,
+            29
+          ],
+          [
+            0,
+            0,
+            350,
+            0
+          ],
+          [
+            0,
+            0,
+            0,
+            351
+          ]
+        ],
+        "classification_report": {
+          "normal": {
+            "precision": 1.0,
+            "recall": 1.0,
+            "f1-score": 1.0,
+            "support": 402.0
+          },
+          "inner_race": {
+            "precision": 1.0,
+            "recall": 0.9116809116809117,
+            "f1-score": 0.9538002980625931,
+            "support": 351.0
+          },
+          "ball": {
+            "precision": 0.9943181818181818,
+            "recall": 1.0,
+            "f1-score": 0.9971509971509972,
+            "support": 350.0
+          },
+          "outer_race": {
+            "precision": 0.9236842105263158,
+            "recall": 1.0,
+            "f1-score": 0.960328317373461,
+            "support": 351.0
+          },
+          "accuracy": 0.9786795048143053,
+          "macro avg": {
+            "precision": 0.9795005980861243,
+            "recall": 0.9779202279202279,
+            "f1-score": 0.9778199031467628,
+            "support": 1454.0
+          },
+          "weighted avg": {
+            "precision": 0.9802094370915408,
+            "recall": 0.9786795048143053,
+            "f1-score": 0.9785845894229049,
+            "support": 1454.0
+          }
+        },
+        "loss": 0.05324134603142738
+      },
+      "recordings": {
+        "count": 10,
+        "accuracy": 1.0,
+        "macro_f1": 1.0,
+        "confusion_matrix": [
+          [
+            1,
+            0,
+            0,
+            0
+          ],
+          [
+            0,
+            3,
+            0,
+            0
+          ],
+          [
+            0,
+            0,
+            3,
+            0
+          ],
+          [
+            0,
+            0,
+            0,
+            3
+          ]
+        ],
+        "classification_report": {
+          "normal": {
+            "precision": 1.0,
+            "recall": 1.0,
+            "f1-score": 1.0,
+            "support": 1.0
+          },
+          "inner_race": {
+            "precision": 1.0,
+            "recall": 1.0,
+            "f1-score": 1.0,
+            "support": 3.0
+          },
+          "ball": {
+            "precision": 1.0,
+            "recall": 1.0,
+            "f1-score": 1.0,
+            "support": 3.0
+          },
+          "outer_race": {
+            "precision": 1.0,
+            "recall": 1.0,
+            "f1-score": 1.0,
+            "support": 3.0
+          },
+          "accuracy": 1.0,
+          "macro avg": {
+            "precision": 1.0,
+            "recall": 1.0,
+            "f1-score": 1.0,
+            "support": 10.0
+          },
+          "weighted avg": {
+            "precision": 1.0,
+            "recall": 1.0,
+            "f1-score": 1.0,
+            "support": 10.0
+          }
+        },
+        "loss": 0.037508659064769745
+      },
+      "record_predictions": [
+        {
+          "group_id": "cwru-100",
+          "class": "normal",
+          "predicted": "normal",
+          "windows": 402
+        },
+        {
+          "group_id": "cwru-108",
+          "class": "inner_race",
+          "predicted": "inner_race",
+          "windows": 118
+        },
+        {
+          "group_id": "cwru-121",
+          "class": "ball",
+          "predicted": "ball",
+          "windows": 116
+        },
+        {
+          "group_id": "cwru-133",
+          "class": "outer_race",
+          "predicted": "outer_race",
+          "windows": 117
+        },
+        {
+          "group_id": "cwru-172",
+          "class": "inner_race",
+          "predicted": "inner_race",
+          "windows": 116
+        },
+        {
+          "group_id": "cwru-188",
+          "class": "ball",
+          "predicted": "ball",
+          "windows": 117
+        },
+        {
+          "group_id": "cwru-200",
+          "class": "outer_race",
+          "predicted": "outer_race",
+          "windows": 117
+        },
+        {
+          "group_id": "cwru-212",
+          "class": "inner_race",
+          "predicted": "inner_race",
+          "windows": 117
+        },
+        {
+          "group_id": "cwru-225",
+          "class": "ball",
+          "predicted": "ball",
+          "windows": 117
+        },
+        {
+          "group_id": "cwru-237",
+          "class": "outer_race",
+          "predicted": "outer_race",
+          "windows": 117
+        }
+      ]
+    },
+    "Noisy": {
+      "class_order": [
+        "normal",
+        "inner_race",
+        "ball",
+        "outer_race"
+      ],
+      "windows": {
+        "count": 1454,
+        "accuracy": 0.9429160935350757,
+        "macro_f1": 0.9400450696109401,
+        "confusion_matrix": [
+          [
+            402,
+            0,
+            0,
+            0
+          ],
+          [
+            0,
+            268,
+            0,
+            83
+          ],
+          [
+            0,
+            0,
+            350,
+            0
+          ],
+          [
+            0,
+            0,
+            0,
+            351
+          ]
+        ],
+        "classification_report": {
+          "normal": {
+            "precision": 1.0,
+            "recall": 1.0,
+            "f1-score": 1.0,
+            "support": 402.0
+          },
+          "inner_race": {
+            "precision": 1.0,
+            "recall": 0.7635327635327636,
+            "f1-score": 0.8659127625201939,
+            "support": 351.0
+          },
+          "ball": {
+            "precision": 1.0,
+            "recall": 1.0,
+            "f1-score": 1.0,
+            "support": 350.0
+          },
+          "outer_race": {
+            "precision": 0.8087557603686636,
+            "recall": 1.0,
+            "f1-score": 0.8942675159235669,
+            "support": 351.0
+          },
+          "accuracy": 0.9429160935350757,
+          "macro avg": {
+            "precision": 0.9521889400921659,
+            "recall": 0.940883190883191,
+            "f1-score": 0.9400450696109401,
+            "support": 1454.0
+          },
+          "weighted avg": {
+            "precision": 0.9538330618221464,
+            "recall": 0.9429160935350757,
+            "f1-score": 0.9421067934895186,
+            "support": 1454.0
+          }
+        },
+        "loss": 0.2398703694343567
+      },
+      "recordings": {
+        "count": 10,
+        "accuracy": 0.9,
+        "macro_f1": 0.9142857142857143,
+        "confusion_matrix": [
+          [
+            1,
+            0,
+            0,
+            0
+          ],
+          [
+            0,
+            2,
+            0,
+            1
+          ],
+          [
+            0,
+            0,
+            3,
+            0
+          ],
+          [
+            0,
+            0,
+            0,
+            3
+          ]
+        ],
+        "classification_report": {
+          "normal": {
+            "precision": 1.0,
+            "recall": 1.0,
+            "f1-score": 1.0,
+            "support": 1.0
+          },
+          "inner_race": {
+            "precision": 1.0,
+            "recall": 0.6666666666666666,
+            "f1-score": 0.8,
+            "support": 3.0
+          },
+          "ball": {
+            "precision": 1.0,
+            "recall": 1.0,
+            "f1-score": 1.0,
+            "support": 3.0
+          },
+          "outer_race": {
+            "precision": 0.75,
+            "recall": 1.0,
+            "f1-score": 0.8571428571428571,
+            "support": 3.0
+          },
+          "accuracy": 0.9,
+          "macro avg": {
+            "precision": 0.9375,
+            "recall": 0.9166666666666666,
+            "f1-score": 0.9142857142857143,
+            "support": 10.0
+          },
+          "weighted avg": {
+            "precision": 0.925,
+            "recall": 0.9,
+            "f1-score": 0.8971428571428571,
+            "support": 10.0
+          }
+        },
+        "loss": 0.11808063089847565
+      },
+      "record_predictions": [
+        {
+          "group_id": "cwru-100",
+          "class": "normal",
+          "predicted": "normal",
+          "windows": 402
+        },
+        {
+          "group_id": "cwru-108",
+          "class": "inner_race",
+          "predicted": "outer_race",
+          "windows": 118
+        },
+        {
+          "group_id": "cwru-121",
+          "class": "ball",
+          "predicted": "ball",
+          "windows": 116
+        },
+        {
+          "group_id": "cwru-133",
+          "class": "outer_race",
+          "predicted": "outer_race",
+          "windows": 117
+        },
+        {
+          "group_id": "cwru-172",
+          "class": "inner_race",
+          "predicted": "inner_race",
+          "windows": 116
+        },
+        {
+          "group_id": "cwru-188",
+          "class": "ball",
+          "predicted": "ball",
+          "windows": 117
+        },
+        {
+          "group_id": "cwru-200",
+          "class": "outer_race",
+          "predicted": "outer_race",
+          "windows": 117
+        },
+        {
+          "group_id": "cwru-212",
+          "class": "inner_race",
+          "predicted": "inner_race",
+          "windows": 117
+        },
+        {
+          "group_id": "cwru-225",
+          "class": "ball",
+          "predicted": "ball",
+          "windows": 117
+        },
+        {
+          "group_id": "cwru-237",
+          "class": "outer_race",
+          "predicted": "outer_race",
+          "windows": 117
+        }
+      ]
+    }
+  },
+  "baseline_history": {
+    "accuracy": [
+      0.9436593651771545,
+      0.9968389868736267,
+      0.9998140335083008,
+      1.0,
+      1.0,
+      1.0,
+      1.0,
+      1.0,
+      1.0,
+      1.0,
+      1.0,
+      1.0,
+      1.0,
+      1.0,
+      1.0,
+      1.0
+    ],
+    "loss": [
+      0.1520468145608902,
+      0.008332234807312489,
+      0.001052597421221435,
+      0.0004796889261342585,
+      0.00010494992602616549,
+      6.488768121926114e-05,
+      7.090297003742307e-05,
+      7.853333954699337e-05,
+      3.8257720007095486e-05,
+      3.4489319659769535e-05,
+      3.1368021154776216e-05,
+      5.671014514518902e-05,
+      3.897195347235538e-05,
+      3.661775554064661e-05,
+      4.2670922994147986e-05,
+      2.191113162552938e-05
+    ],
+    "val_accuracy": [
+      0.9996549487113953,
+      1.0,
+      0.998964786529541,
+      0.998964786529541,
+      0.9993098974227905,
+      0.9996549487113953,
+      0.9996549487113953,
+      0.9996549487113953,
+      0.9996549487113953,
+      0.9996549487113953,
+      0.9996549487113953,
+      0.9996549487113953,
+      0.9993098974227905,
+      0.9993098974227905,
+      0.9993098974227905,
+      0.9993098974227905
+    ],
+    "val_loss": [
+      0.0038036915939301252,
+      0.001771163078956306,
+      0.0033162639010697603,
+      0.0031044227071106434,
+      0.0022313487716019154,
+      0.0013964567333459854,
+      0.001607630867511034,
+      0.001274373265914619,
+      0.0009456863044761121,
+      0.001236724783666432,
+      0.0011285973014310002,
+      0.0008852712926454842,
+      0.0024939796421676874,
+      0.0030870691407471895,
+      0.0018664628732949495,
+      0.0019655702635645866
+    ]
+  }
+}
