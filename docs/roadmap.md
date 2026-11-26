@@ -1,12 +1,28 @@
 # Milestone roadmap
 
-Status baseline: **13 September 2026**, based on code at `f7a8270b8da4f742f09f44ebe4a8b213e69bae63` and the supplied study inventory.
+Historical baseline: **13 September 2026**, based on code at `f7a8270b8da4f742f09f44ebe4a8b213e69bae63` and the supplied study inventory.
 
 ## How progress is measured
 
 Complete means the milestone's scoped deliverables have evidence. M1–M3 are study milestones: they do not certify reproducible numerical experiments, trained models or mastery of every paper. In progress means work exists but acceptance criteria are unmet. Pending can include starter code without validation.
 
-**Current milestone: M5 (next implementation).** M1–M3 completed their study deliverables. M4 completed its selected-cohort ingestion gate on 14 September 2026; see the [implementation evidence](m4_implementation.md). This is not a percentage of effort or product readiness.
+**Historical milestone at the September baseline: M5.** M1–M3 completed their study deliverables. M4 completed its selected-cohort ingestion gate on 14 September 2026; see the [implementation evidence](m4_implementation.md). This is not a percentage of effort or product readiness.
+
+## Current project scope — 26 November 2026
+
+The supervisor-directed hybrid CNN–LSTM experiment has been completed using STFT, DWT and supplied Envelope features. The final [experiment evidence](../reports/hybrid/2026-11-26/README.md) records the actual 40-recording cohort and held-out results (100% clean, 96.70% noisy window accuracy). This supersedes the earlier status as the current project snapshot, without marking unperformed legacy roadmap tasks as complete.
+
+| Scoped work | Status |
+|---|---|
+| M1–M4 study and ingestion | Complete for the selected cohorts |
+| M5 STFT/DWT export and Envelope integration | Complete for hybrid experiment; independent Envelope extraction audit remains |
+| M6 classical SVM/RF baseline | Not completed; outside current scope |
+| M7 CNN and hybrid comparison | Complete for same-cohort CNN baseline |
+| M8 clean/noisy held-out-load evaluation | Complete for one run; other loads, noise levels and seeds deferred |
+| M9 dashboard | Prototype only; outside current scope |
+| M10 academic handoff | In progress: results archived; report/presentation/viva pending |
+
+Ablation is deferred to future work. The old milestones below preserve the original broader acceptance criteria; they are not a claim of completion of unrelated experiments.
 
 ## M1 — Engineering foundations
 
@@ -136,6 +152,6 @@ Existing work: [MAT loader](../src/load_data.py), [preprocessing helpers](../src
 
 ## Next concrete work
 
-Begin M5 by validating the existing statistical, FFT and envelope feature definitions on the amplitude-preserving M4 windows. Preserve group/record/window identifiers in the exported feature table. Do not train or tune against final-test scores before the M5 acceptance gate.
+Finalize the academic report, presentation and viva from the archived hybrid run. Preserve the trained weights and source dataset. Additional architecture/feature ablations and broader robustness experiments are future work. Do not tune against the final test results.
 
 To close a milestone, link its implementation commit, commands, tests and report here, record the completion date, and update the README table in the same change.
