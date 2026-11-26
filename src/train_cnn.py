@@ -8,7 +8,7 @@ from pathlib import Path
 
 import numpy as np
 import tensorflow as tf
-from sklearn.metrics import accuracy_score, confusion_matrix, f1_score
+from sklearn.metrics import accuracy_score, classification_report, confusion_matrix, f1_score, log_loss
 
 from .data_pipeline import CLASSES
 from .feature_dataset import FEATURES_DIR, REPO_ROOT, VARIANTS, load_partitions
@@ -60,8 +60,8 @@ def evaluate_test(model, test_partition):
     x_test, y_test, groups = test_partition
     probabilities = model.predict(x_test, verbose=0)
     predictions = probabilities.argmax(axis=1)
-    classes = list(CLASSES)
-    label_ids = list(CLASSES.values())
+    label_ids = sorted(CLASSES.values())
+    classes = [next(name for name, idx in CLASSES.items() if idx == label) for label in label_ids]
 
     def metrics(actual, predicted):
         return {
@@ -70,13 +70,17 @@ def evaluate_test(model, test_partition):
             "macro_f1": f1_score(actual, predicted, labels=label_ids,
                                  average="macro", zero_division=0),
             "confusion_matrix": confusion_matrix(actual, predicted, labels=label_ids).tolist(),
+            "classification_report": classification_report(actual, predicted, labels=label_ids,
+                target_names=classes, output_dict=True, zero_division=0),
         }
 
-    record_actual, record_predicted, records = [], [], []
+    record_actual, record_predicted, record_probabilities, records = [], [], [], []
     for group in np.unique(groups):
         mask = groups == group
         actual = int(y_test[mask][0])
-        predicted = int(probabilities[mask].mean(axis=0).argmax())
+        mean_probability = probabilities[mask].mean(axis=0)
+        predicted = int(mean_probability.argmax())
+        record_probabilities.append(mean_probability)
         record_actual.append(actual)
         record_predicted.append(predicted)
         records.append({
@@ -86,8 +90,9 @@ def evaluate_test(model, test_partition):
 
     return {
         "class_order": classes,
-        "windows": metrics(y_test, predictions),
-        "recordings": metrics(record_actual, record_predicted),
+        "windows": {**metrics(y_test, predictions), "loss": float(log_loss(y_test, probabilities, labels=label_ids))},
+        "recordings": {**metrics(record_actual, record_predicted),
+                       "loss": float(log_loss(record_actual, np.asarray(record_probabilities), labels=label_ids))},
         "record_predictions": records,
     }
 
